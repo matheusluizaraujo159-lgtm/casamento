@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casamento Jordana & Matheus</title>
+    <link rel="stylesheet" th:href="@{/style.css?v=4}">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="leaves-container">
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+        <div class="leaf"></div>
+    </div>
+
+    <header class="hero fade-in">
+        <p class="subtitle">VAMOS NOS CASAR</p>
+        <h1 class="names">JORDANA<br><span class="ampersand">&</span><br>MATHEUS</h1>
+        
+        <div class="date-container">
+            <hr class="linha-fina">
+            <p class="date">QUARTA-FEIRA, 21 DE ABRIL DE 2027</p>
+            <hr class="linha-fina">
+        </div>
+
+        <div class="hero-buttons">
+            <a href="#rsvp" class="btn-solid">CONFIRMAR PRESENÇA</a>
+            <a href="#presentes" class="btn-solid">LISTA DE PRESENTES</a>
+        </div>
+    </header>
+
+    <section class="countdown-section fade-in">
+        <h2>CONTAGEM REGRESSIVA</h2>
+        <div id="countdown" class="countdown-container">
+            <div class="time-box"><span id="days">00</span><p>Dias</p></div>
+            <div class="time-box"><span id="hours">00</span><p>Horas</p></div>
+            <div class="time-box"><span id="minutes">00</span><p>Min</p></div>
+            <div class="time-box"><span id="seconds">00</span><p>Seg</p></div>
+        </div>
+    </section>
+
+    <section class="quote-section fade-in">
+        <p>"NA ESTRADA DA VIDA, QUE SEJAS SEMPRE MEU AMOR."</p>
+    </section>
+
+    <section class="events-section fade-in">
+        <div class="event">
+            <div class="icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="12" r="5"></circle>
+                    <circle cx="15" cy="12" r="5"></circle>
+                </svg>
+            </div>
+            <h2>CERIMÔNIA</h2>
+            <p class="time">16:00</p>
+            <p class="location">CATEDRAL METROPOLITANA<br>CENTRO HISTÓRICO</p>
+            <a href="#" target="_blank" class="btn-outline">📍 VER NO MAPA</a>
+        </div>
+
+        <div class="event">
+            <div class="icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 22h8"></path><path d="M12 12v10"></path>
+                    <path d="M12 12a5 5 0 0 0 5-5V2H7v5a5 5 0 0 0 5 5z"></path>
+                    <path d="M7 6h10"></path>
+                </svg>
+            </div>
+            <h2>RECEPÇÃO</h2>
+            <p class="time">APÓS A CERIMÔNIA</p>
+            <p class="location">LUSCH GARDEN<br>FLORIANÓPOLIS - SC</p>
+            <a href="#" target="_blank" class="btn-outline">📍 VER NO MAPA</a>
+        </div>
+    </section>
+
+    <section class="dress-code fade-in">
+        <h2>DICAS E TRAJES</h2>
+        <div class="columns">
+            <div class="column">
+                <h3>• PARA ELES</h3>
+                <p>TERNO COMPLETO OU COSTUME. CORES COMO GRAFITE, AZUL MARINHO OU PRETO SÃO ÓTIMAS OPÇÕES.</p>
+            </div>
+            <div class="column">
+                <h3>• PARA ELAS</h3>
+                <p>VESTIDOS LONGOS OU MIDI. RECOMENDAMOS EVITAR TONS DE BRANCO, OFF-WHITE OU CORES MUITO CLARAS.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="rsvp" class="rsvp-section fade-in">
+        <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <path d="M2 6l10 7 10-7"></path>
+            </svg>
+        </div>
+        <h2>CONFIRME SUA PRESENÇA</h2>
+        <p class="rsvp-desc">Por favor, confirme sua presença preenchendo os dados abaixo.</p>
+        
+        <div th:if="${mensagem}" class="mensagem-sucesso">
+            <p th:text="${mensagem}"></p>
+        </div>
+
+        <form th:action="@{/confirmar}" th:object="${convidado}" method="post">
+            <input type="text" th:field="*{nome}" placeholder="Nome Completo" required>
+            <input type="text" th:field="*{telefone}" placeholder="Telefone (WhatsApp)">
+            
+            <select th:field="*{confirmouPresenca}" required>
+                <option value="true">Sim, estarei lá!</option>
+                <option value="false">Infelizmente, não poderei ir.</option>
+            </select>
+            
+            <label class="label-pequena">Acompanhantes (além de você):</label>
+            <input type="number" th:field="*{quantidadeAcompanhantes}" value="0" min="0">
+            
+            <textarea th:field="*{mensagemAosNoivos}" rows="3" placeholder="Deixe uma mensagem para os noivos (opcional)"></textarea>
+            
+            <button type="submit" class="btn-solid btn-enviar">ENVIAR CONFIRMAÇÃO</button>
+        </form>
+    </section>
+
+    <script>
+        const dataCasamento = new Date("April 21, 2027 16:00:00").getTime();
+
+        const relogio = setInterval(function() {
+            const agora = new Date().getTime();
+            const distancia = dataCasamento - agora;
+
+            const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = dias < 10 ? "0" + dias : dias;
+            document.getElementById("hours").innerText = horas < 10 ? "0" + horas : horas;
+            document.getElementById("minutes").innerText = minutos < 10 ? "0" + minutos : minutos;
+            document.getElementById("seconds").innerText = segundos < 10 ? "0" + segundos : segundos;
+
+            if (distancia < 0) {
+                clearInterval(relogio);
+                document.getElementById("countdown").innerHTML = "<h3>CHEGOU O GRANDE DIA!</h3>";
+            }
+        }, 1000);
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visivel');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+    </script>
+</body>
+</html>

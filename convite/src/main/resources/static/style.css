@@ -1,0 +1,333 @@
+/* --- CONFIGURAÇÕES GERAIS --- */
+:root {
+    --fundo-topo: #D7DEE4; 
+    --fundo-site: #FFFFFF;
+    --cor-texto-escuro: #1A2530;
+    --cor-texto-claro: #5A6A7A;
+    --fonte-titulos: 'Cinzel', serif;
+    --fonte-textos: 'Montserrat', sans-serif;
+}
+
+html { 
+    scroll-behavior: smooth; 
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--fundo-site);
+    background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+    color: var(--cor-texto-escuro);
+    font-family: var(--fonte-textos);
+    text-align: center;
+    position: relative;
+}
+
+/* --- ANIMAÇÃO DAS FOLHAS CAINDO (CORRIGIDO) --- */
+.leaves-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Deixa o convidado clicar através das folhas */
+    z-index: 9999;
+    overflow: hidden;
+}
+
+.leaf {
+    position: absolute;
+    top: -50px;
+    width: 22px;
+    height: 22px;
+    /* Faz o formato de uma folha usando bordas arredondadas */
+    border-radius: 0 22px 0 22px; 
+    background-color: #A3B1B6; /* Cor azul-acinzentada elegante para contrastar */
+    opacity: 0.8;
+}
+
+/* Velocidades e posições diferentes para cada folha parecer natural */
+.leaf:nth-child(1) { left: 10%; animation: fall 12s linear infinite, sway 3s ease-in-out infinite alternate; animation-delay: 0s; }
+.leaf:nth-child(2) { left: 30%; animation: fall 16s linear infinite, sway 4s ease-in-out infinite alternate; animation-delay: 2s; transform: scale(0.8); opacity: 0.5;}
+.leaf:nth-child(3) { left: 50%; animation: fall 10s linear infinite, sway 2.5s ease-in-out infinite alternate; animation-delay: 4s; transform: scale(1.2); }
+.leaf:nth-child(4) { left: 70%; animation: fall 18s linear infinite, sway 3.5s ease-in-out infinite alternate; animation-delay: 1s; opacity: 0.4;}
+.leaf:nth-child(5) { left: 85%; animation: fall 14s linear infinite, sway 3s ease-in-out infinite alternate; animation-delay: 5s; transform: scale(0.9);}
+.leaf:nth-child(6) { left: 95%; animation: fall 15s linear infinite, sway 4s ease-in-out infinite alternate; animation-delay: 3s; opacity: 0.6;}
+
+@keyframes fall {
+    0% { top: -50px; }
+    100% { top: 110vh; }
+}
+
+@keyframes sway {
+    0% { transform: translateX(-25px) rotate(0deg); }
+    100% { transform: translateX(25px) rotate(60deg); }
+}
+
+/* --- ANIMAÇÕES DE SURGIMENTO --- */
+.fade-in {
+    opacity: 0;
+    transform: translateY(40px); 
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.fade-in.visivel {
+    opacity: 1;
+    transform: translateY(0); 
+}
+
+/* --- CABEÇALHO --- */
+.hero {
+    background-color: var(--fundo-topo);
+    background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+    padding: 100px 20px 80px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.subtitle {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--cor-texto-claro);
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+
+.names {
+    font-family: var(--fonte-titulos);
+    font-size: 3.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+    color: var(--cor-texto-escuro);
+}
+
+.ampersand {
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--cor-texto-claro);
+    font-weight: 400;
+}
+
+.date-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 40px 0;
+    width: 100%;
+    max-width: 450px;
+}
+
+.linha-fina {
+    flex-grow: 1;
+    height: 1px;
+    background-color: var(--cor-texto-claro);
+    border: none;
+    opacity: 0.4;
+}
+
+.date {
+    font-size: 11px;
+    letter-spacing: 3px;
+    margin: 0 20px;
+    color: var(--cor-texto-escuro);
+}
+
+/* --- BOTÕES --- */
+a { text-decoration: none !important; }
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-solid {
+    background-color: var(--cor-texto-escuro);
+    color: #FFFFFF;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.2s;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.btn-solid:hover {
+    background-color: var(--cor-texto-claro);
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    display: inline-block;
+    background-color: transparent;
+    color: var(--cor-texto-escuro);
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 12px 24px;
+    border: 1px solid var(--cor-texto-escuro);
+    border-radius: 30px;
+    margin-top: 15px;
+    transition: all 0.3s;
+}
+
+.btn-outline:hover {
+    background-color: var(--cor-texto-escuro);
+    color: #FFFFFF;
+}
+
+/* --- CONTAGEM REGRESSIVA --- */
+.countdown-section {
+    padding: 60px 20px;
+}
+
+.countdown-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.time-box {
+    background-color: var(--fundo-topo);
+    background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+    padding: 20px 15px;
+    border-radius: 12px;
+    min-width: 75px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+
+.time-box span {
+    font-family: var(--fonte-titulos);
+    font-size: 2.5rem;
+    color: var(--cor-texto-escuro);
+    display: block;
+    line-height: 1;
+}
+
+.time-box p {
+    font-size: 10px;
+    margin: 10px 0 0 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--cor-texto-claro);
+    font-weight: 500;
+}
+
+/* --- SEÇÕES GERAIS E ÍCONES PROFISSIONAIS --- */
+.quote-section {
+    padding: 50px 20px;
+    font-family: var(--fonte-titulos);
+    font-size: 1.2rem;
+    color: var(--cor-texto-claro);
+}
+
+.events-section { padding: 40px 20px; }
+
+.event { margin-bottom: 70px; }
+
+.icon { margin-bottom: 15px; }
+
+.icon svg {
+    width: 45px;
+    height: 45px;
+    color: var(--cor-texto-escuro);
+    opacity: 0.8;
+}
+
+h2 {
+    font-family: var(--fonte-titulos);
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+}
+
+.time { font-size: 12px; color: var(--cor-texto-claro); letter-spacing: 2px; margin-bottom: 5px; }
+.location { font-size: 12px; color: var(--cor-texto-claro); letter-spacing: 1px; line-height: 1.8; }
+
+/* --- DICAS E TRAJES --- */
+.dress-code { padding: 40px 20px 80px 20px; }
+
+.columns {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    max-width: 600px;
+    margin: 40px auto 0 auto;
+    flex-wrap: wrap;
+}
+
+.column { flex: 1; min-width: 250px; text-align: center; }
+.column h3 { font-family: var(--fonte-titulos); font-size: 1rem; letter-spacing: 2px; margin-bottom: 15px; color: var(--cor-texto-escuro); }
+.column p { font-size: 11px; color: var(--cor-texto-claro); line-height: 1.8; }
+
+/* --- FORMULÁRIO RSVP --- */
+.rsvp-section {
+    padding: 80px 20px;
+    background-color: var(--fundo-topo);
+    background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+}
+
+.rsvp-desc { font-size: 13px; color: var(--cor-texto-claro); margin-bottom: 40px; }
+
+form {
+    max-width: 450px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    position: relative;
+    z-index: 2; /* Garante que o formulário fique por cima das folhas */
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #B0B8C0;
+    border-radius: 8px;
+    font-family: var(--fonte-textos);
+    font-size: 13px;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus, textarea:focus { 
+    outline: none; 
+    border-color: var(--cor-texto-escuro); 
+}
+
+.label-pequena { 
+    font-size: 12px; 
+    text-align: left; 
+    color: var(--cor-texto-claro); 
+    margin-bottom: -10px; 
+    font-weight: 500; 
+}
+
+.btn-enviar { 
+    margin-top: 15px; 
+    font-size: 12px; 
+    padding: 18px; 
+}
+
+.mensagem-sucesso { 
+    color: #2e7d32; 
+    background-color: #e8f5e9; 
+    padding: 15px; 
+    border-radius: 8px; 
+    margin-bottom: 25px; 
+    font-size: 14px; 
+    border: 1px solid #c8e6c9; 
+}
