@@ -4,10 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casamento Jordana & Matheus</title>
-    <link rel="stylesheet" th:href="@{/style.css?v=4}">
+    <link rel="stylesheet" th:href="@{/style.css?v=8}">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="bloquear-scroll">
+
+    <div id="envelope-overlay" class="envelope-overlay">
+        <div class="envelope-wrapper">
+            <div class="envelope">
+                <div class="envelope-paper">
+                    <div class="paper-border">
+                        <div class="paper-content">
+                            <p class="save-the-date">SAVE THE DATE</p>
+                            <h2>JORDANA & MATHEUS</h2>
+                            <p class="data-convite">21 DE ABRIL DE 2027</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="envelope-flap"></div>
+                <div id="wax-seal" class="wax-seal">
+                    <span>ABRIR</span>
+                </div>
+            </div>
+        </div>
+        <p class="envelope-dica">Você recebeu um convite. Clique no selo para abrir.</p>
+    </div>
 
     <div class="leaves-container">
         <div class="leaf"></div>
@@ -30,7 +51,7 @@
 
         <div class="hero-buttons">
             <a href="#rsvp" class="btn-solid">CONFIRMAR PRESENÇA</a>
-            <a href="#presentes" class="btn-solid">LISTA DE PRESENTES</a>
+            <a th:href="@{/presentes}" class="btn-solid">LISTA DE PRESENTES</a>
         </div>
     </header>
 
@@ -124,6 +145,32 @@
     </section>
 
     <script>
+        // --- 1. LÓGICA DO ENVELOPE CINEMATOGRÁFICO ---
+        const waxSeal = document.getElementById('wax-seal');
+        const envelope = document.querySelector('.envelope');
+        const envelopeWrapper = document.querySelector('.envelope-wrapper');
+        const overlay = document.getElementById('envelope-overlay');
+        const body = document.body;
+
+        if (waxSeal) {
+            waxSeal.addEventListener('click', function() {
+                // Abre o envelope e desliza o cartão pra fora
+                envelope.classList.add('open');
+                // Dá um zoom dramático
+                envelopeWrapper.classList.add('open-zoom');
+                
+                // Espera 2.5 segundos para a pessoa admirar o cartão e ler os nomes
+                setTimeout(() => {
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                        body.classList.remove('bloquear-scroll'); // Libera o site
+                    }, 1000); // Duração do fade out
+                }, 2500);
+            });
+        }
+
+        // --- 2. LÓGICA DO RELÓGIO ---
         const dataCasamento = new Date("April 21, 2027 16:00:00").getTime();
 
         const relogio = setInterval(function() {
@@ -146,6 +193,7 @@
             }
         }, 1000);
 
+        // --- 3. LÓGICA DE SURGIMENTO DAS SEÇÕES ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {

@@ -8,45 +8,126 @@
     --fonte-textos: 'Montserrat', sans-serif;
 }
 
-html { 
-    scroll-behavior: smooth; 
-}
+html { scroll-behavior: smooth; }
 
 body {
-    margin: 0;
-    padding: 0;
+    margin: 0; padding: 0;
     background-color: var(--fundo-site);
     background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
     color: var(--cor-texto-escuro);
     font-family: var(--fonte-textos);
-    text-align: center;
-    position: relative;
+    text-align: center; position: relative;
 }
 
-/* --- ANIMAÇÃO DAS FOLHAS CAINDO (CORRIGIDO) --- */
+.bloquear-scroll { overflow: hidden; }
+
+/* ========================================= */
+/* --- A MÁGICA DO ENVELOPE GIGANTE ---*/
+/* ========================================= */
+.envelope-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: var(--fundo-topo);
+    background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+    z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    transition: opacity 1s ease-in-out, visibility 1s;
+}
+
+.envelope-overlay.hidden {
+    opacity: 0; visibility: hidden; pointer-events: none;
+}
+
+/* O "Wrapper" controla o tamanho do envelope na tela do celular */
+.envelope-wrapper {
+    transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* O Envelope base agora tem o dobro do tamanho (600x400) */
+.envelope {
+    position: relative; width: 600px; height: 400px;
+    background-color: #E6E1D8;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+    display: flex; justify-content: center; align-items: center;
+}
+
+/* O CARTÃO ENFEITADO DE DENTRO */
+.envelope-paper {
+    position: absolute; top: 20px; left: 20px; width: 560px; height: 360px;
+    background-color: #FDFBF7; z-index: 1; display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1); transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    border-radius: 4px;
+}
+
+/* A dupla borda chique do convite */
+.paper-border {
+    width: 90%; height: 86%; border: 1px solid #C4BCB0;
+    outline: 1px solid #C4BCB0; outline-offset: -6px; /* Borda dupla */
+    display: flex; justify-content: center; align-items: center;
+}
+
+.paper-content { text-align: center; }
+.save-the-date { font-family: var(--fonte-textos); font-size: 14px; letter-spacing: 5px; color: #8A7A65; margin-bottom: 20px; }
+.envelope-paper h2 { font-family: var(--fonte-titulos); font-size: 2.8rem; color: #1A2530; margin: 0; font-weight: 400; }
+.data-convite { font-family: var(--fonte-titulos); font-size: 16px; letter-spacing: 3px; color: #5A6A7A; margin-top: 25px; }
+
+/* Laterais e fundo do envelope */
+.envelope::before {
+    content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 0;
+    border-left: 300px solid #DCD5CA; border-right: 300px solid #DCD5CA; border-bottom: 230px solid #E6E1D8;
+    z-index: 3;
+}
+
+/* A aba de cima do envelope (que vai abrir) */
+.envelope-flap {
+    position: absolute; top: 0; left: 0; width: 0; height: 0;
+    border-left: 300px solid transparent; border-right: 300px solid transparent; border-top: 230px solid #C4BCB0;
+    z-index: 4; transform-origin: top; transition: transform 0.8s ease-in-out, z-index 0.8s;
+    filter: drop-shadow(0 5px 8px rgba(0,0,0,0.1));
+}
+
+/* O Selo Maior */
+.wax-seal {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 80px; height: 80px; background-color: #902E30; border-radius: 50%; z-index: 5;
+    cursor: pointer; display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.4);
+    transition: opacity 0.5s, transform 0.4s; border: 3px solid #752224;
+}
+.wax-seal span { color: #FDFBF7; font-size: 12px; font-family: var(--fonte-titulos); letter-spacing: 2px; }
+.wax-seal:hover { transform: translate(-50%, -50%) scale(1.1); }
+
+/* --- A ANIMAÇÃO DO CLIQUE --- */
+.envelope.open .envelope-flap { transform: rotateX(180deg); z-index: 0; filter: drop-shadow(0 -5px 8px rgba(0,0,0,0.05)); }
+.envelope.open .wax-seal { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0.5); }
+.envelope.open .envelope-paper { 
+    transform: translateY(-180px); /* Puxa o cartão BEM para fora para poder ler! */ 
+}
+.envelope-wrapper.open-zoom {
+    transform: scale(1.15); /* Dá o zoom dramático na tela */
+}
+
+.envelope-dica {
+    margin-top: 60px; font-size: 11px; color: var(--cor-texto-claro); letter-spacing: 2px; text-transform: uppercase;
+}
+
+/* Adaptando o envelope gigante para os celulares não quebrarem a tela */
+@media (max-width: 700px) { .envelope-wrapper { transform: scale(0.85); } .envelope-wrapper.open-zoom { transform: scale(0.95); } }
+@media (max-width: 500px) { .envelope-wrapper { transform: scale(0.65); } .envelope-wrapper.open-zoom { transform: scale(0.75); } }
+@media (max-width: 400px) { .envelope-wrapper { transform: scale(0.55); } .envelope-wrapper.open-zoom { transform: scale(0.65); } }
+
+/* ========================================= */
+/* --- RESTO DO SITE (FOLHAS E CONTEÚDO) --- */
+/* ========================================= */
+
 .leaves-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Deixa o convidado clicar através das folhas */
-    z-index: 9999;
-    overflow: hidden;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 9999; overflow: hidden;
 }
 
 .leaf {
-    position: absolute;
-    top: -50px;
-    width: 22px;
-    height: 22px;
-    /* Faz o formato de uma folha usando bordas arredondadas */
-    border-radius: 0 22px 0 22px; 
-    background-color: #A3B1B6; /* Cor azul-acinzentada elegante para contrastar */
-    opacity: 0.8;
+    position: absolute; top: -50px; width: 22px; height: 22px;
+    border-radius: 0 22px 0 22px; background-color: #A3B1B6; opacity: 0.8;
 }
 
-/* Velocidades e posições diferentes para cada folha parecer natural */
 .leaf:nth-child(1) { left: 10%; animation: fall 12s linear infinite, sway 3s ease-in-out infinite alternate; animation-delay: 0s; }
 .leaf:nth-child(2) { left: 30%; animation: fall 16s linear infinite, sway 4s ease-in-out infinite alternate; animation-delay: 2s; transform: scale(0.8); opacity: 0.5;}
 .leaf:nth-child(3) { left: 50%; animation: fall 10s linear infinite, sway 2.5s ease-in-out infinite alternate; animation-delay: 4s; transform: scale(1.2); }
@@ -54,280 +135,75 @@ body {
 .leaf:nth-child(5) { left: 85%; animation: fall 14s linear infinite, sway 3s ease-in-out infinite alternate; animation-delay: 5s; transform: scale(0.9);}
 .leaf:nth-child(6) { left: 95%; animation: fall 15s linear infinite, sway 4s ease-in-out infinite alternate; animation-delay: 3s; opacity: 0.6;}
 
-@keyframes fall {
-    0% { top: -50px; }
-    100% { top: 110vh; }
-}
+@keyframes fall { 0% { top: -50px; } 100% { top: 110vh; } }
+@keyframes sway { 0% { transform: translateX(-25px) rotate(0deg); } 100% { transform: translateX(25px) rotate(60deg); } }
 
-@keyframes sway {
-    0% { transform: translateX(-25px) rotate(0deg); }
-    100% { transform: translateX(25px) rotate(60deg); }
-}
+.fade-in { opacity: 0; transform: translateY(40px); transition: opacity 1s ease-out, transform 1s ease-out; }
+.fade-in.visivel { opacity: 1; transform: translateY(0); }
 
-/* --- ANIMAÇÕES DE SURGIMENTO --- */
-.fade-in {
-    opacity: 0;
-    transform: translateY(40px); 
-    transition: opacity 1s ease-out, transform 1s ease-out;
-}
-
-.fade-in.visivel {
-    opacity: 1;
-    transform: translateY(0); 
-}
-
-/* --- CABEÇALHO --- */
 .hero {
-    background-color: var(--fundo-topo);
-    background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
-    padding: 100px 20px 80px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background-color: var(--fundo-topo); background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+    padding: 100px 20px 80px 20px; display: flex; flex-direction: column; align-items: center; min-height: 80vh; justify-content: center;
 }
+.subtitle { font-size: 11px; letter-spacing: 4px; color: var(--cor-texto-claro); margin-bottom: 25px; text-transform: uppercase; }
+.names { font-family: var(--fonte-titulos); font-size: 3.5rem; font-weight: 500; line-height: 1.2; margin: 0; color: var(--cor-texto-escuro); }
+.ampersand { font-size: 2rem; font-style: italic; color: var(--cor-texto-claro); font-weight: 400; }
+.date-container { display: flex; align-items: center; justify-content: center; margin: 40px 0; width: 100%; max-width: 450px; }
+.linha-fina { flex-grow: 1; height: 1px; background-color: var(--cor-texto-claro); border: none; opacity: 0.4; }
+.date { font-size: 11px; letter-spacing: 3px; margin: 0 20px; color: var(--cor-texto-escuro); }
 
-.subtitle {
-    font-size: 11px;
-    letter-spacing: 4px;
-    color: var(--cor-texto-claro);
-    margin-bottom: 25px;
-    text-transform: uppercase;
-}
-
-.names {
-    font-family: var(--fonte-titulos);
-    font-size: 3.5rem;
-    font-weight: 500;
-    line-height: 1.2;
-    margin: 0;
-    color: var(--cor-texto-escuro);
-}
-
-.ampersand {
-    font-size: 2rem;
-    font-style: italic;
-    color: var(--cor-texto-claro);
-    font-weight: 400;
-}
-
-.date-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 40px 0;
-    width: 100%;
-    max-width: 450px;
-}
-
-.linha-fina {
-    flex-grow: 1;
-    height: 1px;
-    background-color: var(--cor-texto-claro);
-    border: none;
-    opacity: 0.4;
-}
-
-.date {
-    font-size: 11px;
-    letter-spacing: 3px;
-    margin: 0 20px;
-    color: var(--cor-texto-escuro);
-}
-
-/* --- BOTÕES --- */
 a { text-decoration: none !important; }
-
-.hero-buttons {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
+.hero-buttons { display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap; justify-content: center; }
 .btn-solid {
-    background-color: var(--cor-texto-escuro);
-    color: #FFFFFF;
-    font-size: 10px;
-    letter-spacing: 2px;
-    padding: 14px 28px;
-    border-radius: 30px;
-    font-weight: 500;
-    transition: background-color 0.3s, transform 0.2s;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    background-color: var(--cor-texto-escuro); color: #FFFFFF; font-size: 10px; letter-spacing: 2px;
+    padding: 14px 28px; border-radius: 30px; font-weight: 500; transition: background-color 0.3s, transform 0.2s;
+    border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
-
-.btn-solid:hover {
-    background-color: var(--cor-texto-claro);
-    transform: translateY(-2px);
-}
-
+.btn-solid:hover { background-color: var(--cor-texto-claro); transform: translateY(-2px); }
 .btn-outline {
-    display: inline-block;
-    background-color: transparent;
-    color: var(--cor-texto-escuro);
-    font-size: 10px;
-    letter-spacing: 1px;
-    padding: 12px 24px;
-    border: 1px solid var(--cor-texto-escuro);
-    border-radius: 30px;
-    margin-top: 15px;
-    transition: all 0.3s;
+    display: inline-block; background-color: transparent; color: var(--cor-texto-escuro); font-size: 10px;
+    letter-spacing: 1px; padding: 12px 24px; border: 1px solid var(--cor-texto-escuro); border-radius: 30px;
+    margin-top: 15px; transition: all 0.3s;
 }
+.btn-outline:hover { background-color: var(--cor-texto-escuro); color: #FFFFFF; }
 
-.btn-outline:hover {
-    background-color: var(--cor-texto-escuro);
-    color: #FFFFFF;
-}
-
-/* --- CONTAGEM REGRESSIVA --- */
-.countdown-section {
-    padding: 60px 20px;
-}
-
-.countdown-container {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 30px;
-    flex-wrap: wrap;
-}
-
+.countdown-section { padding: 60px 20px; }
+.countdown-container { display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
 .time-box {
-    background-color: var(--fundo-topo);
-    background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
-    padding: 20px 15px;
-    border-radius: 12px;
-    min-width: 75px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    background-color: var(--fundo-topo); background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+    padding: 20px 15px; border-radius: 12px; min-width: 75px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
 }
+.time-box span { font-family: var(--fonte-titulos); font-size: 2.5rem; color: var(--cor-texto-escuro); display: block; line-height: 1; }
+.time-box p { font-size: 10px; margin: 10px 0 0 0; text-transform: uppercase; letter-spacing: 1px; color: var(--cor-texto-claro); font-weight: 500; }
 
-.time-box span {
-    font-family: var(--fonte-titulos);
-    font-size: 2.5rem;
-    color: var(--cor-texto-escuro);
-    display: block;
-    line-height: 1;
-}
-
-.time-box p {
-    font-size: 10px;
-    margin: 10px 0 0 0;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--cor-texto-claro);
-    font-weight: 500;
-}
-
-/* --- SEÇÕES GERAIS E ÍCONES PROFISSIONAIS --- */
-.quote-section {
-    padding: 50px 20px;
-    font-family: var(--fonte-titulos);
-    font-size: 1.2rem;
-    color: var(--cor-texto-claro);
-}
-
+.quote-section { padding: 50px 20px; font-family: var(--fonte-titulos); font-size: 1.2rem; color: var(--cor-texto-claro); }
 .events-section { padding: 40px 20px; }
-
 .event { margin-bottom: 70px; }
-
 .icon { margin-bottom: 15px; }
-
-.icon svg {
-    width: 45px;
-    height: 45px;
-    color: var(--cor-texto-escuro);
-    opacity: 0.8;
-}
-
-h2 {
-    font-family: var(--fonte-titulos);
-    font-size: 1.6rem;
-    font-weight: 500;
-    letter-spacing: 3px;
-    margin-bottom: 20px;
-}
-
+.icon svg { width: 45px; height: 45px; color: var(--cor-texto-escuro); opacity: 0.8; }
+h2 { font-family: var(--fonte-titulos); font-size: 1.6rem; font-weight: 500; letter-spacing: 3px; margin-bottom: 20px; }
 .time { font-size: 12px; color: var(--cor-texto-claro); letter-spacing: 2px; margin-bottom: 5px; }
 .location { font-size: 12px; color: var(--cor-texto-claro); letter-spacing: 1px; line-height: 1.8; }
 
-/* --- DICAS E TRAJES --- */
 .dress-code { padding: 40px 20px 80px 20px; }
-
-.columns {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    max-width: 600px;
-    margin: 40px auto 0 auto;
-    flex-wrap: wrap;
-}
-
+.columns { display: flex; justify-content: center; gap: 40px; max-width: 600px; margin: 40px auto 0 auto; flex-wrap: wrap; }
 .column { flex: 1; min-width: 250px; text-align: center; }
 .column h3 { font-family: var(--fonte-titulos); font-size: 1rem; letter-spacing: 2px; margin-bottom: 15px; color: var(--cor-texto-escuro); }
 .column p { font-size: 11px; color: var(--cor-texto-claro); line-height: 1.8; }
 
-/* --- FORMULÁRIO RSVP --- */
 .rsvp-section {
-    padding: 80px 20px;
-    background-color: var(--fundo-topo);
-    background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+    padding: 80px 20px; background-color: var(--fundo-topo); background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
 }
-
 .rsvp-desc { font-size: 13px; color: var(--cor-texto-claro); margin-bottom: 40px; }
-
 form {
-    max-width: 450px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    background: transparent;
-    box-shadow: none;
-    padding: 0;
-    position: relative;
-    z-index: 2; /* Garante que o formulário fique por cima das folhas */
+    max-width: 450px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px;
+    background: transparent; box-shadow: none; padding: 0; position: relative; z-index: 2;
 }
-
 input, select, textarea {
-    width: 100%;
-    padding: 15px;
-    border: 1px solid #B0B8C0;
-    border-radius: 8px;
-    font-family: var(--fonte-textos);
-    font-size: 13px;
-    box-sizing: border-box;
-    background-color: #FFFFFF;
-    transition: border-color 0.3s;
+    width: 100%; padding: 15px; border: 1px solid #B0B8C0; border-radius: 8px; font-family: var(--fonte-textos);
+    font-size: 13px; box-sizing: border-box; background-color: #FFFFFF; transition: border-color 0.3s;
 }
-
-input:focus, select:focus, textarea:focus { 
-    outline: none; 
-    border-color: var(--cor-texto-escuro); 
-}
-
-.label-pequena { 
-    font-size: 12px; 
-    text-align: left; 
-    color: var(--cor-texto-claro); 
-    margin-bottom: -10px; 
-    font-weight: 500; 
-}
-
-.btn-enviar { 
-    margin-top: 15px; 
-    font-size: 12px; 
-    padding: 18px; 
-}
-
-.mensagem-sucesso { 
-    color: #2e7d32; 
-    background-color: #e8f5e9; 
-    padding: 15px; 
-    border-radius: 8px; 
-    margin-bottom: 25px; 
-    font-size: 14px; 
-    border: 1px solid #c8e6c9; 
-}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--cor-texto-escuro); }
+.label-pequena { font-size: 12px; text-align: left; color: var(--cor-texto-claro); margin-bottom: -10px; font-weight: 500; }
+.btn-enviar { margin-top: 15px; font-size: 12px; padding: 18px; }
+.mensagem-sucesso { color: #2e7d32; background-color: #e8f5e9; padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 14px; border: 1px solid #c8e6c9; }

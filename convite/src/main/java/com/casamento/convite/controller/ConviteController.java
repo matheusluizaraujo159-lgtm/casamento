@@ -27,4 +27,10 @@ public class ConviteController {
         model.addAttribute("convidado", new Convidado()); 
         return "index"; 
     }
+
+    // NOVA ROTA: Cria o caminho para a página de presentes
+    @GetMapping("/presentes")
+    public String exibirPresentes() {
+        return "presentes"; 
+    }
 }

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Presentes - Jordana & Matheus</title>
+    <link rel="stylesheet" th:href="@{/style.css?v=6}">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="flowers-container">
+        <div class="flower-anim">❀</div>
+        <div class="flower-anim">✿</div>
+        <div class="flower-anim">❀</div>
+        <div class="flower-anim">✿</div>
+        <div class="flower-anim">❀</div>
+    </div>
+
+    <div style="text-align: left; padding: 20px 30px; position: absolute; top: 0; left: 0; z-index: 10;">
+        <a th:href="@{/}" class="btn-outline" style="font-size: 9px; border-color: transparent;">← VOLTAR AO CONVITE</a>
+    </div>
+
+    <section class="presentes-section fade-in" style="min-height: 100vh; padding-top: 80px;">
+        <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="8" width="18" height="12" rx="2"></rect>
+                <path d="M12 8v12"></path>
+                <path d="M11.5 3a2.5 2.5 0 0 0-5 5A2.5 2.5 0 0 0 9 10.5h6a2.5 2.5 0 0 0 2.5-2.5 2.5 2.5 0 0 0-5-5"></path>
+            </svg>
+        </div>
+        <h2>LISTA DE PRESENTES</h2>
+        <p class="presentes-desc">A presença de vocês é o nosso maior presente! Mas, se desejarem nos abençoar com algo a mais, preparamos duas opções com muito carinho:</p>
+
+        <div class="loja-container">
+            <h3>Prefere usar Cartão de Crédito?</h3>
+            <p>Criamos uma lista completa em uma loja parceira com itens que escolhemos para a nossa casa.</p>
+            <a href="#" target="_blank" class="btn-solid btn-loja">🎁 ACESSAR LISTA NA LOJA</a>
+        </div>
+
+        <hr class="linha-fina" style="margin: 40px auto;">
+
+        <h3>Cotas de Lua de Mel (PIX)</h3>
+        <p class="presentes-desc" style="margin-bottom: 20px;">Ajude-nos a criar memórias inesquecíveis na nossa viagem.</p>
+        
+        <div class="grid-presentes">
+            <div class="card-presente">
+                <h4>Brinde dos Noivos</h4>
+                <p class="valor">R$ 50,00</p>
+                <a href="#" target="_blank" class="btn-outline btn-pix">🤍 ENVIAR PIX</a>
+            </div>
+            <div class="card-presente">
+                <h4>Jantar Romântico</h4>
+                <p class="valor">R$ 150,00</p>
+                <a href="#" target="_blank" class="btn-outline btn-pix">🤍 ENVIAR PIX</a>
+            </div>
+            <div class="card-presente">
+                <h4>Passeio Especial</h4>
+                <p class="valor">R$ 300,00</p>
+                <a href="#" target="_blank" class="btn-outline btn-pix">🤍 ENVIAR PIX</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.querySelectorAll('.fade-in').forEach(el => {
+            setTimeout(() => el.classList.add('visivel'), 100);
+        });
+    </script>
+</body>
+</html>
